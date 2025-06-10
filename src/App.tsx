@@ -1,36 +1,27 @@
-import React, { useState } from 'react';
+import React from 'react';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { ChakraProvider } from '@chakra-ui/react';
-import theme from './theme';
 import Layout from './components/Layout/Layout';
+import ClienteMenu from './components/Cliente/ClienteMenu';
 import ClienteManagement from './components/Cliente/ClienteManagement';
-import AgentConfiguration from './components/Agent/AgentConfiguration';
-import { Cliente } from './lib/supabase';
+import { ClienteProvider } from './context/ClienteContext';
 
-function App() {
-  const [selectedCliente, setSelectedCliente] = useState<Cliente | null>(null);
-
-  const handleSelectCliente = (cliente: Cliente) => {
-    setSelectedCliente(cliente);
-  };
-
-  const handleBackToClientes = () => {
-    setSelectedCliente(null);
-  };
-
+const App: React.FC = () => {
   return (
-    <ChakraProvider theme={theme}>
-      <Layout>
-        {selectedCliente ? (
-          <AgentConfiguration
-            cliente={selectedCliente}
-            onBack={handleBackToClientes}
-          />
-        ) : (
-          <ClienteManagement onSelectCliente={handleSelectCliente} />
-        )}
-      </Layout>
+    <ChakraProvider>
+      <ClienteProvider>
+        <Router>
+          <Layout>
+            <Routes>
+              <Route path="/" element={<ClienteManagement />} />
+              <Route path="/cliente/:clienteId/*" element={<ClienteMenu />} />
+              <Route path="/configuracoes" element={<div>Configurações Gerais</div>} />
+            </Routes>
+          </Layout>
+        </Router>
+      </ClienteProvider>
     </ChakraProvider>
   );
-}
+};
 
 export default App;

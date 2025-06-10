@@ -3,20 +3,32 @@ import { supabase } from '../utils/supabase.js';
 
 const router = Router();
 
-// POST /api/webhook/:cliente_id
+// POST /webhook/:cliente_id
 router.post('/:cliente_id', async (req, res) => {
-  const { cliente_id } = req.params;
-  const { message } = req.body;
-
   try {
-    // Process the message and generate a response
-    const responseMessage = `Processed message for client ${cliente_id}: ${message}`;
+    const { remoteJid, mensagem, tipo } = req.body;
+    const { cliente_id } = req.params;
 
-    // Send the response to the Evolution instance
-    // This is a placeholder for sending the response
-    console.log(`Sending response to Evolution instance: ${responseMessage}`);
+    // Verifica se o número está autorizado
+    const { data: instancias, error } = await supabase
+      .from('instancias')
+      .select('numeros_autorizados, ativa')
+      .eq('cliente_id', cliente_id)
+      .eq('ativa', true);
 
-    res.json({ success: true, response: responseMessage });
+    if (error || !instancias || instancias.length === 0) {
+      return res.status(403).json({ error: 'Instância não autorizada ou inativa' });
+    }
+
+    const instancia = instancias.find(inst => inst.numeros_autorizados.includes(remoteJid));
+    if (!instancia) {
+      return res.status(403).json({ error: 'Número não autorizado para esta instância' });
+    }
+
+    // Processa a mensagem e envia a resposta
+    // Lógica de processamento da mensagem aqui
+
+    res.json({ success: true, message: 'Mensagem processada com sucesso' });
   } catch (error) {
     console.error('Erro ao processar webhook:', error);
     res.status(500).json({ error: 'Erro ao processar webhook' });
