@@ -1,41 +1,30 @@
 import React from 'react';
-import { Box, VStack, Link, Text } from '@chakra-ui/react';
+import { Box, VStack, Link } from '@chakra-ui/react';
 import { NavLink } from 'react-router-dom';
 
-const Sidebar = () => {
+const Sidebar: React.FC = () => {
   return (
-    <Box
-      as="nav"
-      position="fixed"
-      left={0}
-      top={0}
-      w="250px"
-      h="100vh"
-      bg="gray.800"
-      color="white"
-      p={4}
-    >
+    <Box as="nav" width="250px" bg="gray.100" p={4}>
       <VStack align="start" spacing={4}>
-        <Text fontSize="2xl" fontWeight="bold">AgentHub</Text>
-        <Link as={NavLink} to="/dashboard" _hover={{ textDecoration: 'none' }}>
+        <Link as={NavLink} to="/dashboard" activeClassName="active">
           Dashboard
         </Link>
-        <Link as={NavLink} to="/instancias" _hover={{ textDecoration: 'none' }}>
+        <Link as={NavLink} to="/instancias" activeClassName="active">
           Instâncias
         </Link>
-        <Link as={NavLink} to="/agentes" _hover={{ textDecoration: 'none' }}>
+        <Link as={NavLink} to="/agentes" activeClassName="active">
           Agentes
         </Link>
-        <Link as={NavLink} to="/numeros" _hover={{ textDecoration: 'none' }}>
+        <Link as={NavLink} to="/numeros" activeClassName="active">
           Números
         </Link>
-        <Link as={NavLink} to="/plugins" _hover={{ textDecoration: 'none' }}>
+        <Link as={NavLink} to="/plugins" activeClassName="active">
           Plugins
         </Link>
-        <Link as={NavLink} to="/base-conhecimento" _hover={{ textDecoration: 'none' }}>
+        <Link as={NavLink} to="/base-de-conhecimento" activeClassName="active">
           Base de Conhecimento
         </Link>
-        <Link as={NavLink} to="/webhook" _hover={{ textDecoration: 'none' }}>
+        <Link as={NavLink} to="/webhook" activeClassName="active">
           Webhook
         </Link>
       </VStack>

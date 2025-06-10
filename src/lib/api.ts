@@ -1,20 +1,25 @@
 import axios from 'axios';
 
-// Create an instance of axios with default settings
+interface Cliente {
+  id: string;
+  nome: string;
+  // adicione outras propriedades conforme o retorno da API
+}
+
 const apiClient = axios.create({
-  baseURL: 'http://localhost:3001/api', // Ensure the base URL is correct
+  baseURL: import.meta.env.VITE_API_URL || 'http://localhost:3001/api',
   headers: {
-    'Content-Type': 'application/json',
-  },
+    'Content-Type': 'application/json'
+  }
 });
 
-// Define a function to get clients
-export const getClientes = async () => {
+// Função para obter todos os clientes
+export const getClientes = async (): Promise<Cliente[]> => {
   try {
-    const response = await apiClient.get('/clientes');
+    const response = await apiClient.get<Cliente[]>('/clientes');
     return response.data;
   } catch (error) {
-    console.error('Error fetching clients:', error);
+    console.error('Erro ao buscar clientes:', error);
     throw error;
   }
 };
